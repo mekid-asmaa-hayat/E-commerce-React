@@ -1,7 +1,7 @@
-    // Import Firebase core
-    import { initializeApp } from "firebase/app";
 
-    // 🔥 IMPORT MANQUANT (TRÈS IMPORTANT)
+    import { initializeApp } from "firebase/app";
+    import { getAuth } from "firebase/auth";
+
     import { getFirestore } from "firebase/firestore";
 
     
@@ -16,8 +16,9 @@
     appId: "1:1097652620150:web:5945379be4157a3505c857"
     };
 
-    // Initialiser Firebase
+
     const app = initializeApp(firebaseConfig);
 
-    // ✅ EXPORT CORRECT
+    export const auth=getAuth(app);
+
     export const db = getFirestore(app);
