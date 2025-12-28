@@ -12,6 +12,8 @@
     Settings
     } from "lucide-react";
     import { AuthContext } from "../context/AuthContext";
+    import { CartContext } from '../context/CartContext';
+    import Products from "./Products";
 
     export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,7 +21,10 @@
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [isScrolled, setIsScrolled] = useState(false);
-    const [cartCount, setCartCount] = useState(2); // Exemple: 3 articles dans le panier
+     
+    const { getTotalItems } = useContext(CartContext);
+      const totalItems = getTotalItems(); 
+
 
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -66,7 +71,7 @@
     // Navigation principale
     const mainNavLinks = [
         { name: "Nouveautés", path: "/nouveautes" },
-        { name: "Parfums", path: "/parfums" },
+        { name: "Parfums", path: "/Products" },
         { name: "Maquillage", path: "/maquillage" },
         { name: "Soins", path: "/soins" },
     
@@ -238,9 +243,9 @@
                     aria-label="Panier"
                 >
                     <ShoppingBag className="w-5 h-5 text-gray-700" />
-                    {cartCount > 0 && (
+                    {totalItems > 0 && (
                     <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-rose-600 to-amber-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
-                        {cartCount}
+                        {totalItems}
                     </span>
                     )}
                 </Link>

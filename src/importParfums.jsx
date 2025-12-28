@@ -1,4 +1,4 @@
-/*import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 // 🧴 Tes parfums
@@ -44,5 +44,5 @@ const parfums = [
     console.log("✅ Import terminé !");
     }
 
-// 🔥 Lancer l’import
+
 importParfums();
