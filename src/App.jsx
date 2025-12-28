@@ -1,32 +1,25 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./Components/Navbar"
-import Products from "./Components/Products";
-import TopBar from "./Components/TopBar";
-import Menu from "./Components/Menu";
-import Connecter from "./Components/Connecter";
-import Body from "./Components/Body";
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./Components/Navbar";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
     <>
-    <TopBar/>
-    <Router>
       <Navbar />
-
+      
       <div className="pt-20">
         <Routes>
-          
-          <Route path="/Menu" element={<Menu />} />
-      
-        
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
-    </Router>
-    <Connecter/>
-    <Body/>
-    
     </>
   );
 }
 
-export default App;
+export default App;  
