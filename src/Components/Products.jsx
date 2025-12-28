@@ -3,13 +3,13 @@
     import { collection, getDocs } from "firebase/firestore";
     import { db } from "../firebase";
     import { CartContext } from "../context/CartContext";
-    import Toast from "./Toast"; // ⬅️ Importer le Toast
+    import Toast from "./Toast"; 
 
     function Products() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [toast, setToast] = useState(null); // ⬅️ État pour le toast
+    const [toast, setToast] = useState(null); 
     
     const { ajouterAuPanier } = useContext(CartContext);
 
@@ -72,11 +72,6 @@
             />
         )}
 
-        <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-2">Parfums</h1>
-            <p className="text-gray-600">{products.length} produits disponibles</p>
-        </div>
-
         {products.length === 0 && (
             <div className="text-center py-20">
             <p className="text-xl text-gray-500">Aucun parfum disponible</p>
@@ -90,11 +85,11 @@
                 className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden"
             >
                 {/* Image */}
-                <div className="relative overflow-hidden bg-gray-100">
+                <div className="relative overflow-hidden ">
                 <img
                     src={product.imageUrl || "/placeholder.jpg"}
                     alt={product.name}
-                    className="w-full h-72 object-cover hover:scale-105 transition-transform duration-300"
+                    className="w-full h-70 object-cover scale-75  hover:scale-90 transition-transform duration-300"
                     onError={(e) => {
                     e.target.src = "https://via.placeholder.com/300x400?text=Image+Non+Disponible";
                     }}
