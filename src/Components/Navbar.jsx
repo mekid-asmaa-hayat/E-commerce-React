@@ -3,7 +3,7 @@
     import { 
     Search, 
     User, 
-    ShoppingBag, 
+    ShoppingCart, 
     Menu, 
     X, 
     Heart,
@@ -13,7 +13,7 @@
     } from "lucide-react";
     import { AuthContext } from "../context/AuthContext";
     import { CartContext } from '../context/CartContext';
-    import Products from "./Products";
+    import { FavoritesContext } from "../context/FavoritesContext"; // ✅ Déjà importé
 
     export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,10 +21,12 @@
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [isScrolled, setIsScrolled] = useState(false);
-     
+    
     const { getTotalItems } = useContext(CartContext);
-      const totalItems = getTotalItems(); 
-
+    const { getTotalFavorites } = useContext(FavoritesContext); // ⬅️ AJOUTER CECI
+    
+    const totalItems = getTotalItems(); 
+    const totalFavorites = getTotalFavorites(); // ⬅️ AJOUTER CECI
 
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -74,7 +76,6 @@
         { name: "Parfums", path: "/Products" },
         { name: "Maquillage", path: "/maquillage" },
         { name: "Soins", path: "/soins" },
-    
         { name: "Offres", path: "/offres", highlight: true }
     ];
 
@@ -96,10 +97,8 @@
                 to="/" 
                 className="flex-shrink-0 group"
                 >
-                <h1 className="text-3xl text-pink-500 lg:text-4xl font-bold tracking-[0.3em] uppercase ">
-                
+                <h1 className="text-3xl text-pink-500 lg:text-4xl font-bold tracking-[0.3em] uppercase">
                     SEPHORA
-                
                 </h1>
                 </Link>
 
@@ -136,16 +135,18 @@
                     <Search className="w-5 h-5 text-gray-700" />
                 </button>
 
-                {/* FAVORIS */}
+                {/* FAVORIS ⬅️ CORRIGER ICI */}
                 <Link
                     to="/favoris"
                     className="hidden sm:block p-2 rounded-full hover:bg-gray-100 transition-colors relative"
                     aria-label="Favoris"
                 >
                     <Heart className="w-5 h-5 text-gray-700" />
-                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-pink-600 text-white text-xs rounded-full flex items-center justify-center">
-                    5
+                    {totalFavorites > 0 && ( // ⬅️ AJOUTER CETTE CONDITION
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-pink-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                        {totalFavorites} {/* ⬅️ CHANGER ICI */}
                     </span>
+                    )}
                 </Link>
 
                 {/* UTILISATEUR / CONNEXION */}
@@ -201,7 +202,14 @@
                             className="flex items-center space-x-3 px-4 py-2 hover:bg-gray-50 transition-colors"
                             >
                             <Heart className="w-4 h-4 text-gray-600" />
-                            <span className="text-sm text-gray-700">Mes favoris</span>
+                            <span className="text-sm text-gray-700">
+                                Mes favoris
+                                {totalFavorites > 0 && ( // ⬅️ AJOUTER LE BADGE ICI AUSSI
+                                <span className="ml-2 px-2 py-0.5 bg-pink-100 text-pink-600 text-xs rounded-full">
+                                    {totalFavorites}
+                                </span>
+                                )}
+                            </span>
                             </Link>
 
                             <Link
@@ -238,13 +246,13 @@
 
                 {/* PANIER */}
                 <Link
-                    to="/panier"
+                    to="/Panier"
                     className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
                     aria-label="Panier"
                 >
-                    <ShoppingBag className="w-5 h-5 text-gray-700" />
+                    <ShoppingCart className="w-5 h-5 text-gray-700" />
                     {totalItems > 0 && (
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-rose-600 to-amber-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-pink-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
                         {totalItems}
                     </span>
                     )}
@@ -373,10 +381,17 @@
                     <Link
                         to="/favoris"
                         onClick={() => setIsMenuOpen(false)}
-                        className="flex items-center space-x-3 px-4 py-3 hover:bg-gray-100 rounded-xl"
+                        className="flex items-center justify-between px-4 py-3 hover:bg-gray-100 rounded-xl"
                     >
+                        <div className="flex items-center space-x-3">
                         <Heart className="w-5 h-5 text-gray-600" />
                         <span>Mes favoris</span>
+                        </div>
+                        {totalFavorites > 0 && ( // ⬅️ AJOUTER LE BADGE MOBILE
+                        <span className="px-2 py-1 bg-pink-100 text-pink-600 text-xs font-bold rounded-full">
+                            {totalFavorites}
+                        </span>
+                        )}
                     </Link>
                     <Link
                         to="/commandes"

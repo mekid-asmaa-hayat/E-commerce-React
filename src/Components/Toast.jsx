@@ -5,7 +5,7 @@
     useEffect(() => {
         const timer = setTimeout(() => {
         onClose();
-        }, 2000); // Disparaît après 2 secondes
+        }, 2000); 
 
         return () => clearTimeout(timer);
     }, [onClose]);
@@ -13,9 +13,9 @@
     const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
 
     return (
-        <div className="fixed top-4 right-4 z-50 animate-slide-in">
+        <div className="fixed top-20 right-4 z-50 animate-slide-in">
         <div className={`${bgColor} text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 min-w-[300px]`}>
-            {/* Icône corrigée */}
+        
             <span className="text-2xl">
             {type === "success" ? (
                 <FaCheckCircle className="text-white text-2xl" />

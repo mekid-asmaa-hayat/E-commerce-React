@@ -1,80 +1,55 @@
-    // src/Components/Products.jsx
-    import { useEffect, useState, useContext } from "react";
-    import { collection, getDocs } from "firebase/firestore";
-    import { db } from "../firebase";
-    import { CartContext } from "../context/CartContext";
-    import { FavoritesContext } from "../context/FavoritesContext";
-    import Toast from "./Toast";
-    import { Heart, ShoppingCart } from "lucide-react"; 
+    // src/pages/Favoris.jsx
+    import { useContext, useState } from 'react';
+    import { Link } from 'react-router-dom';
+    import { FavoritesContext } from '../context/FavoritesContext';
+    import { CartContext } from '../context/CartContext';
+    import { Heart, Trash2, ShoppingCart } from 'lucide-react'; // ⬅️ Lucide Icons
+    import Toast from '../Components/Toast';
 
-
-    function Products() {
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [toast, setToast] = useState(null);
-    
+    function Favoris() {
+    const { favorites, retirerDesFavoris } = useContext(FavoritesContext);
     const { ajouterAuPanier } = useContext(CartContext);
-    const { toggleFavori, estFavori } = useContext(FavoritesContext);
+    const [toast, setToast] = useState(null);
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-        try {
-            setLoading(true);
-            const querySnapshot = await getDocs(collection(db, "products"));
-            const list = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-            }));
-            setProducts(list);
-        } catch (error) {
-            console.error("ERREUR FIRESTORE :", error);
-            setError("Impossible de charger les produits");
-        } finally {
-            setLoading(false);
-        }
-        };
-
-        fetchProducts();
-    }, []);
+    const handleRetirerFavori = (product) => {
+        retirerDesFavoris(product.id);
+        setToast({
+        message: `${product.name} retiré des favoris`,
+        type: 'success'
+        });
+    };
 
     const handleAjouterAuPanier = (product) => {
         ajouterAuPanier(product);
         setToast({
-        message: `${product.name} ajouté au panier avec succès !`,
+        message: `${product.name} ajouté au panier`,
         type: 'success'
         });
     };
 
-    const handleToggleFavori = (product) => {
-        const ajout = toggleFavori(product);
-        setToast({
-        message: ajout 
-            ? `${product.name} ajouté aux favoris ❤️` 
-            : `${product.name} retiré des favoris`,
-        type: 'success'
-        });
-    };
-
-    if (loading) {
+    if (favorites.length === 0) {
         return (
-        <div className="flex justify-center items-center min-h-screen">
-            <div className="text-xl">Chargement des produits...</div>
-        </div>
-        );
-    }
-
-    if (error) {
-        return (
-        <div className="flex justify-center items-center min-h-screen">
-            <div className="text-xl text-red-600">{error}</div>
+        <div className="container mx-auto px-4 py-20 text-center">
+            <div className="max-w-md mx-auto">
+            <Heart className="text-gray-300 w-20 h-20 mx-auto mb-4" />
+            <h1 className="text-3xl font-bold mb-4">Aucun favori</h1>
+            <p className="text-gray-600 mb-8">
+                Explorez notre collection et ajoutez vos parfums préférés à vos favoris !
+            </p>
+            <Link
+                to="/"
+                className="inline-block bg-black text-white px-8 py-3 rounded-full font-semibold hover:bg-gray-800 transition-colors"
+            >
+                Découvrir nos produits
+            </Link>
+            </div>
         </div>
         );
     }
 
     return (
         <div className="container mx-auto px-4 py-8">
-        {/* Toast Notification */}
+        {/* Toast */}
         {toast && (
             <Toast
             message={toast.message}
@@ -83,35 +58,29 @@
             />
         )}
 
-        <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-2">Parfums</h1>
-            <p className="text-gray-600">{products.length} produits disponibles</p>
+        {/* En-tête */}
+        <div className="mb-8">
+            <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+            <Heart className="text-red-500 fill-red-500 w-8 h-8" />
+            Mes Favoris
+            </h1>
+            <p className="text-gray-600">{favorites.length} produit{favorites.length > 1 ? 's' : ''}</p>
         </div>
 
-        {products.length === 0 && (
-            <div className="text-center py-20">
-            <p className="text-xl text-gray-500">Aucun parfum disponible</p>
-            </div>
-        )}
-
+        {/* Grille de produits */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.map((product) => (
+            {favorites.map((product) => (
             <div
                 key={product.id}
                 className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden relative group"
             >
-                {/* Bouton Favori avec Lucide ⬅️ */}
+                {/* Bouton Retirer avec Lucide ⬅️ */}
                 <button
-                onClick={() => handleToggleFavori(product)}
-                className="absolute top-3 right-3 z-10 bg-white rounded-full p-2 shadow-md hover:scale-110 transition-transform"
+                onClick={() => handleRetirerFavori(product)}
+                className="absolute top-3 right-3 z-10 bg-white rounded-full p-2 shadow-md hover:bg-red-50 transition-colors"
+                title="Retirer des favoris"
                 >
-                <Heart
-                    className={`w-6 h-6 transition-colors ${
-                    estFavori(product.id)
-                        ? "fill-red-500 text-red-500"
-                        : "text-gray-400 group-hover:text-red-500"
-                    }`}
-                />
+                <Trash2 className="text-red-500 w-5 h-5" />
                 </button>
 
                 {/* Image */}
@@ -121,10 +90,10 @@
                     alt={product.name}
                     className="w-full h-72 object-cover hover:scale-105 transition-transform duration-300"
                     onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/300x400?text=Image+Non+Disponible";
+                    e.target.src = "https://via.placeholder.com/300x400?text=Image";
                     }}
                 />
-                
+
                 {/* Badge Stock */}
                 {product.stock < 5 && product.stock > 0 && (
                     <div className="absolute top-2 left-2 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
@@ -180,4 +149,4 @@
     );
     }
 
-    export default Products;
+    export default Favoris;

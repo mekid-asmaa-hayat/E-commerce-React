@@ -4,49 +4,50 @@
     export const CartContext = createContext();
 
     export function CartProvider({ children }) {
-    const [cartItems, setCartItems] = useState([]);
-
-    // Charger le panier depuis localStorage au démarrage
-    useEffect(() => {
+    const [cartItems, setCartItems] = useState(() => {
         const savedCart = localStorage.getItem('cart');
-        if (savedCart) {
-        setCartItems(JSON.parse(savedCart));
-        }
-    }, []);
+        return savedCart ? JSON.parse(savedCart) : [];
+    });
 
-    // Sauvegarder le panier dans localStorage à chaque changement
+    const [lastRemovedItem, setLastRemovedItem] = useState(null); // ⬅️ Pour le undo
+
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cartItems));
     }, [cartItems]);
 
-    // Ajouter un produit au panier
     const ajouterAuPanier = (product) => {
         setCartItems((prevItems) => {
-        // Vérifier si le produit existe déjà dans le panier
         const existingItem = prevItems.find(item => item.id === product.id);
-
         if (existingItem) {
-            // Si le produit existe, augmenter la quantité
             return prevItems.map(item =>
             item.id === product.id
                 ? { ...item, quantity: item.quantity + 1 }
                 : item
             );
         } else {
-            // Si le produit n'existe pas, l'ajouter avec quantité 1
             return [...prevItems, { ...product, quantity: 1 }];
         }
         });
     };
 
-    // Retirer un produit du panier
+    // ⬅️ Retirer avec possibilité de undo
     const retirerDuPanier = (productId) => {
+        const itemToRemove = cartItems.find(item => item.id === productId);
+        setLastRemovedItem(itemToRemove);
+        
         setCartItems((prevItems) =>
         prevItems.filter(item => item.id !== productId)
         );
     };
 
-    // Augmenter la quantité
+    // ⬅️ Fonction pour annuler la suppression
+    const undoRemove = () => {
+        if (lastRemovedItem) {
+        setCartItems((prevItems) => [...prevItems, lastRemovedItem]);
+        setLastRemovedItem(null);
+        }
+    };
+
     const augmenterQuantite = (productId) => {
         setCartItems((prevItems) =>
         prevItems.map(item =>
@@ -57,7 +58,6 @@
         );
     };
 
-    // Diminuer la quantité
     const diminuerQuantite = (productId) => {
         setCartItems((prevItems) =>
         prevItems.map(item =>
@@ -68,17 +68,15 @@
         );
     };
 
-    // Vider le panier
     const viderPanier = () => {
         setCartItems([]);
+        localStorage.removeItem('cart');
     };
 
-    // Calculer le nombre total d'articles
     const getTotalItems = () => {
         return cartItems.reduce((total, item) => total + item.quantity, 0);
     };
 
-    // Calculer le prix total
     const getTotalPrice = () => {
         return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
     };
@@ -94,6 +92,8 @@
             viderPanier,
             getTotalItems,
             getTotalPrice,
+            undoRemove, // ⬅️ Nouvelle fonction
+            lastRemovedItem, // ⬅️ Pour savoir si on peut undo
         }}
         >
         {children}
