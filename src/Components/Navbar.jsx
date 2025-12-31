@@ -13,7 +13,7 @@
     } from "lucide-react";
     import { AuthContext } from "../context/AuthContext";
     import { CartContext } from '../context/CartContext';
-    import { FavoritesContext } from "../context/FavoritesContext"; // ✅ Déjà importé
+    import { FavoritesContext } from "../context/FavoritesContext"; // 
 
     export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,10 +23,10 @@
     const [isScrolled, setIsScrolled] = useState(false);
     
     const { getTotalItems } = useContext(CartContext);
-    const { getTotalFavorites } = useContext(FavoritesContext); // ⬅️ AJOUTER CECI
+    const { getTotalFavorites } = useContext(FavoritesContext); 
     
     const totalItems = getTotalItems(); 
-    const totalFavorites = getTotalFavorites(); // ⬅️ AJOUTER CECI
+    const totalFavorites = getTotalFavorites(); 
 
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -135,7 +135,7 @@
                     <Search className="w-5 h-5 text-gray-700" />
                 </button>
 
-                {/* FAVORIS ⬅️ CORRIGER ICI */}
+                {/* FAVORIS */}
                 <Link
                     to="/favoris"
                     className="hidden sm:block p-2 rounded-full hover:bg-gray-100 transition-colors relative"
@@ -204,7 +204,7 @@
                             <Heart className="w-4 h-4 text-gray-600" />
                             <span className="text-sm text-gray-700">
                                 Mes favoris
-                                {totalFavorites > 0 && ( // ⬅️ AJOUTER LE BADGE ICI AUSSI
+                                {totalFavorites > 0 && ( 
                                 <span className="ml-2 px-2 py-0.5 bg-pink-100 text-pink-600 text-xs rounded-full">
                                     {totalFavorites}
                                 </span>
@@ -342,7 +342,7 @@
                     className={({ isActive }) =>
                         `block px-4 py-3 rounded-xl text-base font-medium transition-all ${
                         link.highlight
-                            ? 'bg-gradient-to-r from-rose-600 to-amber-600 text-white'
+                            ? 'bg-pink-500 text-white'
                             : isActive
                             ? 'bg-black text-white'
                             : 'text-gray-700 hover:bg-gray-100'
@@ -387,7 +387,7 @@
                         <Heart className="w-5 h-5 text-gray-600" />
                         <span>Mes favoris</span>
                         </div>
-                        {totalFavorites > 0 && ( // ⬅️ AJOUTER LE BADGE MOBILE
+                        {totalFavorites > 0 && ( 
                         <span className="px-2 py-1 bg-pink-100 text-pink-600 text-xs font-bold rounded-full">
                             {totalFavorites}
                         </span>

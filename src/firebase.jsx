@@ -1,12 +1,9 @@
 
     import { initializeApp } from "firebase/app";
     import { getAuth } from "firebase/auth";
-
     import { getFirestore } from "firebase/firestore";
 
-    
 
-    // Configuration Firebase
     const firebaseConfig = {
     apiKey: "AIzaSyAIMpMVTsU0_v3vC2JRK6d1S49DGNkh0XM",
     authDomain: "sephora-4d92b.firebaseapp.com",

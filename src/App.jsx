@@ -7,6 +7,7 @@ import Profile from "./pages/Profile";
 import Products from "./Components/Products";
 import Panier from "./Components/Panier";
 import Favoris from "./pages/Favoris";
+import Search from "./pages/Search";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/Products" element ={<Products />} />
           <Route path="/Panier" element ={<Panier />} />
           <Route path="/Favoris" element ={<Favoris />} />
+          <Route path="/Search" element={<Search />} />
         </Routes>
       </div>
     </>

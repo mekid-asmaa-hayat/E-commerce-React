@@ -1,4 +1,4 @@
-    // src/pages/Panier.jsx
+
     import { useContext, useState } from 'react';
     import { Link } from 'react-router-dom';
     import { CartContext } from '../context/CartContext';
@@ -19,7 +19,7 @@
 
     const [showToast, setShowToast] = useState(false);
 
-    // Retirer sans confirmation, juste afficher le toast
+    // Retirer sans confirmation
     const handleRetirer = (item) => {
         retirerDuPanier(item.id);
         setShowToast(true);
