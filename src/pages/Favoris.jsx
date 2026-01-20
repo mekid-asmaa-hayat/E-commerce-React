@@ -3,7 +3,7 @@
     import { Link } from 'react-router-dom';
     import { FavoritesContext } from '../context/FavoritesContext';
     import { CartContext } from '../context/CartContext';
-    import { Heart, Trash2, ShoppingCart } from 'lucide-react'; // ⬅️ Lucide Icons
+    import { Heart, Trash2, ShoppingCart } from 'lucide-react'; 
     import Toast from '../Components/Toast';
 
     function Favoris() {
@@ -74,7 +74,7 @@
                 key={product.id}
                 className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden relative group"
             >
-                {/* Bouton Retirer avec Lucide ⬅️ */}
+            
                 <button
                 onClick={() => handleRetirerFavori(product)}
                 className="absolute top-3 right-3 z-10 bg-white rounded-full p-2 shadow-md hover:bg-red-50 transition-colors"

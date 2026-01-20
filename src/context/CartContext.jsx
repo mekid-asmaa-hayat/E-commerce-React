@@ -9,7 +9,7 @@
         return savedCart ? JSON.parse(savedCart) : [];
     });
 
-    const [lastRemovedItem, setLastRemovedItem] = useState(null); // ⬅️ Pour le undo
+    const [lastRemovedItem, setLastRemovedItem] = useState(null); 
 
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cartItems));
@@ -40,7 +40,7 @@
         );
     };
 
-    // ⬅️ Fonction pour annuler la suppression
+    //  Fonction pour annuler la suppression
     const undoRemove = () => {
         if (lastRemovedItem) {
         setCartItems((prevItems) => [...prevItems, lastRemovedItem]);
@@ -92,8 +92,8 @@
             viderPanier,
             getTotalItems,
             getTotalPrice,
-            undoRemove, // ⬅️ Nouvelle fonction
-            lastRemovedItem, // ⬅️ Pour savoir si on peut undo
+            undoRemove, 
+            lastRemovedItem, //
         }}
         >
         {children}
