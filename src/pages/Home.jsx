@@ -1,7 +1,7 @@
-    // src/pages/Home.jsx
+
     import { useState, useEffect, useContext } from 'react';
     import { Link } from 'react-router-dom';
-    import { collection, getDocs, query, limit, orderBy } from 'firebase/firestore';
+    import { collection, getDocs, query, limit } from 'firebase/firestore';
     import { db } from '../firebase';
     import { CartContext } from '../context/CartContext';
     import { FavoritesContext } from '../context/FavoritesContext';
@@ -25,30 +25,27 @@
         title: "Nouvelle Collection",
         subtitle: "Parfums d'exception 2026",
         description: "Découvrez les fragrances qui définiront l'année",
-        image: "https://res.cloudinary.com/dld0kyawv/image/upload/v1767182083/Sephora-Favorites-Gleamy-Dreamy-Makeup-Value-Set_wepjlp.jpg",
+        image: "https://res.cloudinary.com/dld0kyawv/image/upload/v1768904988/photo-1765031117402-93b2e530edec_nqmhws.jpg",
         cta: "Découvrir",
-        link: "/nouveautes",
-        textColor: "text-red"
+        link: "/Offres",
         },
         {
         id: 2,
         title: "Offres Exclusives",
         subtitle: "Jusqu'à -30% sur une sélection",
         description: "Les plus grandes marques au meilleur prix",
-        image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=1920&h=800&fit=crop",
+        image: "https://res.cloudinary.com/dld0kyawv/image/upload/v1768907501/photo-1596462502278-27bfdc403348_o1w6uo.jpg",
         cta: "Voir les offres",
-        link: "/offres",
-    
+        link: "/Offres",
         },
         {
         id: 3,
         title: "Marques de Luxe",
         subtitle: "Chanel • Dior • YSL",
         description: "L'excellence des plus grands parfumeurs",
-        image: "https://res.cloudinary.com/dld0kyawv/image/upload/v1767181686/Sephora-beauty-banner1_ckjm5t.jpg",
+        image: "https://res.cloudinary.com/dld0kyawv/image/upload/v1768907798/photo-1763987300634-7b0822cbf390_hsntxv.jpg",
         cta: "Explorer",
-        link: "/Products",
-    
+        link: "/Offres",
         }
     ];
 
@@ -56,41 +53,65 @@
     const categories = [
         {
         name: "Parfums Femme",
-        image: "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=400&h=500&fit=crop",
+        image: "https://res.cloudinary.com/dld0kyawv/image/upload/v1768984672/photo-1757313171134-d4c0cce5d0a1_dzoiu9.jpg",
         link: "/Products?category=femme",
         icon: Sparkles
         },
         {
         name: "Parfums Homme",
-        image: "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=400&h=500&fit=crop",
+        image: "https://res.cloudinary.com/dld0kyawv/image/upload/v1768984283/photo-1758871993077-e084cc7eca86_ghwix4.jpg",
         link: "/Products?category=homme",
         icon: TrendingUp
         },
         {
         name: "Coffrets Cadeaux",
-        image: "https://images.unsplash.com/photo-1549048046-1c4164e1a00f?w=400&h=500&fit=crop",
+        image: "https://res.cloudinary.com/dld0kyawv/image/upload/v1768985027/pexels-mich-graphics-420890924-15191189_vhjahy.jpg",
         link: "/Products?category=coffrets",
         icon: Gift
         }
     ];
 
-    // Charger les produits
     useEffect(() => {
         const fetchProducts = async () => {
         try {
             setLoading(true);
-            const productsRef = collection(db, 'products');
-            
-            // Produits en vedette (limité à 8)
-            const featuredQuery = query(productsRef, limit(8));
-            const featuredSnapshot = await getDocs(featuredQuery);
-            const featured = featuredSnapshot.docs.map(doc => ({
+
+            // Charger les 3 collections en parallèle
+            const [productsSnap, makeupSnap, skincareSnap] = await Promise.all([
+            getDocs(query(collection(db, 'products'), limit(4))),
+            getDocs(query(collection(db, 'makeup'), limit(4))),
+            getDocs(query(collection(db, 'Skincare'), limit(4)))
+            ]);
+
+            const productsData = productsSnap.docs.map((doc) => ({
             id: doc.id,
-            ...doc.data()
+            ...doc.data(),
+            category: 'Parfums'
             }));
+
+            const makeupData = makeupSnap.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+            category: 'Makeup'
+            }));
+
+            const skincareData = skincareSnap.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+            category: 'Soins'
+            }));
+
+            // Fusionner tous les produits
+            const allProducts = [...productsData, ...makeupData, ...skincareData];
+
+        
+            const shuffled = allProducts.sort(() => 0.5 - Math.random());
+
+            // Produits populaires 
+            setFeaturedProducts(shuffled.slice(0, 8));
             
-            setFeaturedProducts(featured);
-            setNewProducts(featured.slice(0, 4)); // 4 nouveautés
+            // Nouveautés 
+            setNewProducts(shuffled.slice(0, 4));
         } catch (error) {
             console.error('Erreur:', error);
         } finally {
@@ -105,7 +126,7 @@
     useEffect(() => {
         const timer = setInterval(() => {
         setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-        }, 6000);
+        }, 4000);
 
         return () => clearInterval(timer);
     }, []);
@@ -139,7 +160,7 @@
             />
         )}
 
-        {/* HERO CAROUSEL - Grande publicité */}
+        {/* HERO CAROUSEL */}
         <section className="relative h-[600px] lg:h-[700px] overflow-hidden mt-20">
             {heroSlides.map((slide, index) => (
             <div
@@ -159,21 +180,21 @@
                 </div>
 
                 {/* Contenu */}
-                <div className="relative h-full flex items-center">
+                <div className="relative h-full flex items-start pt-24">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                     <div className="max-w-2xl">
-                    <p className="text-white/90 text-lg mb-2 font-medium animate-fade-in">
+                    <p className="text-black/90 text-lg mb-2 font-medium animate-fade-in">
                         {slide.subtitle}
                     </p>
-                    <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 animate-slide-up">
+                    <h1 className="text-5xl lg:text-7xl font-bold text-black mb-6 animate-slide-up">
                         {slide.title}
                     </h1>
-                    <p className="text-xl text-white/90 mb-8 animate-fade-in-delay">
+                    <p className="text-xl text-black/90 mb-8 animate-fade-in-delay">
                         {slide.description}
                     </p>
                     <Link
                         to={slide.link}
-                        className="inline-flex items-center gap-2 px-8 py-4 bg-white text-gray-900 rounded-full font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-xl"
+                        className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white rounded-full font-semibold hover:bg-gray-800 transition-all transform hover:scale-105 shadow-xl"
                     >
                         {slide.cta}
                         <ArrowRight className="w-5 h-5" />
@@ -254,7 +275,7 @@
                 <p className="text-gray-600">Les dernières fragrances du moment</p>
                 </div>
                 <Link
-                to="/nouveautes"
+                to="/Offres"
                 className="hidden md:flex items-center gap-2 text-pink-600 hover:text-pink-700 font-semibold"
                 >
                 Voir tout
@@ -276,7 +297,7 @@
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {newProducts.map((product) => (
                     <ProductCard
-                    key={product.id}
+                    key={`${product.category}-${product.id}`}
                     product={product}
                     onAddToCart={handleAjouterAuPanier}
                     onToggleFavorite={handleToggleFavori}
@@ -289,7 +310,7 @@
         </section>
 
         {/* BANNIÈRE PROMOTIONNELLE */}
-        <section className="py-16 bg-gradient-to-r from-amber-50 to-pink-50">
+        <section className="py-16 bg-pink-500">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
                 <div className="grid md:grid-cols-2">
@@ -313,7 +334,7 @@
                 </div>
                 <div className="relative h-64 md:h-auto">
                     <img
-                    src="https://images.unsplash.com/photo-1588405748880-12d1d2a59bd9?w=800&h=600&fit=crop"
+                    src="https://res.cloudinary.com/dld0kyawv/image/upload/v1768986329/pexels-richan-dwi-putra-88532517-12616233_dri09n.jpg"
                     alt="Offres"
                     className="w-full h-full object-cover"
                     />
@@ -343,7 +364,7 @@
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {featuredProducts.map((product) => (
                 <ProductCard
-                    key={product.id}
+                    key={`${product.category}-${product.id}`}
                     product={product}
                     onAddToCart={handleAjouterAuPanier}
                     onToggleFavorite={handleToggleFavori}
@@ -401,13 +422,19 @@
     );
     }
 
-    // Composant ProductCard réutilisable
+    // COMPOSANT PRODUCTCARD AVEC BADGE CATÉGORIE
+    
     function ProductCard({ product, onAddToCart, onToggleFavorite, isFavorite }) {
     return (
         <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group">
         <div className="relative">
+            {/* Badge Catégorie */}
+            <span className="absolute top-3 left-3 z-10 px-3 py-1 bg-black/70 text-white text-xs font-semibold rounded-full">
+            {product.category || 'Parfums'}
+            </span>
+
             {/* Badge Nouveau */}
-            <span className="absolute top-3 left-3 z-10 px-3 py-1 bg-pink-600 text-white text-xs font-semibold rounded-full">
+            <span className="absolute top-3 left-24 z-10 px-3 py-1 bg-pink-600 text-white text-xs font-semibold rounded-full">
             NOUVEAU
             </span>
 

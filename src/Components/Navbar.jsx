@@ -31,7 +31,7 @@
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    // Détecter le scroll pour changer le style de la navbar
+
     useEffect(() => {
         const handleScroll = () => {
         setIsScrolled(window.scrollY > 20);
@@ -40,7 +40,7 @@
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    // Fermer les menus quand on clique ailleurs
+    
     useEffect(() => {
         const handleClickOutside = (e) => {
         if (!e.target.closest('.user-menu-container')) {
@@ -72,11 +72,13 @@
 
     // Navigation principale
     const mainNavLinks = [
-        { name: "Nouveautés", path: "/nouveautes" },
+    
         { name: "Parfums", path: "/Products" },
-        { name: "Maquillage", path: "/maquillage" },
-        { name: "Soins", path: "/soins" },
-        { name: "Offres", path: "/offres", highlight: true }
+        { name: "Makeup", path: "/Makeup" },
+        { name: "Skincare", path: "/Skincare" },
+        { name: "Offres", path: "/Offres" }
+
+        
     ];
 
     return (
@@ -97,7 +99,7 @@
                 to="/" 
                 className="flex-shrink-0 group"
                 >
-                <h1 className="text-3xl text-pink-500 lg:text-4xl font-bold tracking-[0.3em] uppercase">
+                <h1 className="text-3xl text-stone-900 lg:text-4xl font-bold tracking-[0.3em] uppercase ">
                     SEPHORA
                 </h1>
                 </Link>
@@ -188,7 +190,7 @@
                             </Link>
 
                             <Link
-                            to="/commandes"
+                            to="/Panier"
                             onClick={() => setIsUserMenuOpen(false)}
                             className="flex items-center space-x-3 px-4 py-2 hover:bg-gray-50 transition-colors"
                             >
@@ -212,14 +214,7 @@
                             </span>
                             </Link>
 
-                            <Link
-                            to="/settings"
-                            onClick={() => setIsUserMenuOpen(false)}
-                            className="flex items-center space-x-3 px-4 py-2 hover:bg-gray-50 transition-colors"
-                            >
-                            <Settings className="w-4 h-4 text-gray-600" />
-                            <span className="text-sm text-gray-700">Paramètres</span>
-                            </Link>
+                            
                         </div>
 
                         <div className="border-t border-gray-100 pt-2">

@@ -1,4 +1,4 @@
-    // src/Components/Products.jsx
+
     import { useEffect, useState, useContext } from "react";
     import { collection, getDocs } from "firebase/firestore";
     import { db } from "../firebase";
@@ -8,7 +8,7 @@
     import { Heart, ShoppingCart } from "lucide-react"; 
 
 
-    function Products() {
+    function Makeup() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -21,7 +21,7 @@
         const fetchProducts = async () => {
         try {
             setLoading(true);
-            const querySnapshot = await getDocs(collection(db, "products"));
+            const querySnapshot = await getDocs(collection(db, "makeup"));
             const list = querySnapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
@@ -29,7 +29,7 @@
             setProducts(list);
         } catch (error) {
             console.error("ERREUR FIRESTORE :", error);
-            setError("Impossible de charger les produits");
+            setError("Impossible de charger les produits makeup");
         } finally {
             setLoading(false);
         }
@@ -59,7 +59,7 @@
     if (loading) {
         return (
         <div className="flex justify-center items-center min-h-screen">
-            <div className="text-xl">Chargement des produits...</div>
+            <div className="text-xl">Chargement des produits makeup...</div>
         </div>
         );
     }
@@ -84,13 +84,12 @@
         )}
 
         <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-2">Parfums</h1>
-        
+            <h1 className="text-4xl font-bold mb-2">💄 Makeup</h1>
         </div>
 
         {products.length === 0 && (
             <div className="text-center py-20">
-            <p className="text-xl text-gray-500">Aucun parfum disponible</p>
+            <p className="text-xl text-gray-500">Aucun produit makeup disponible</p>
             </div>
         )}
 
@@ -100,7 +99,7 @@
                 key={product.id}
                 className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden relative group"
             >
-                {/* Bouton Favori avec Lucide ⬅️ */}
+        
                 <button
                 onClick={() => handleToggleFavori(product)}
                 className="absolute top-3 right-3 z-10 bg-white rounded-full p-2 shadow-md hover:scale-110 transition-transform"
@@ -121,7 +120,7 @@
                     alt={product.name}
                     className="w-full h-72 object-cover hover:scale-105 transition-transform duration-300"
                     onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/300x400?text=Image+Non+Disponible";
+                    e.target.src = "https://placehold.co/300x400/pink/white?text=Image+Non+Disponible";
                     }}
                 />
                 
@@ -180,4 +179,4 @@
     );
     }
 
-    export default Products;
+    export default Makeup;

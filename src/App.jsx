@@ -8,13 +8,19 @@ import Products from "./Components/Products";
 import Panier from "./Components/Panier";
 import Favoris from "./pages/Favoris";
 import Search from "./pages/Search";
+import Offres from "./Components/Offres";
+import Makeup from "./Components/Makeup";
+import AdminSecret from "./pages/AdminSecret";
+import AdminMakeup from './pages/AdminMakeup';
+import AdminSkincare from "./pages/AdminSkincare";
+import Skincare from './Components/Skincare';
 
 function App() {
   return (
     <>
       <Navbar />
       
-      <div className="pt-20">
+      <div >
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -24,6 +30,13 @@ function App() {
           <Route path="/Panier" element ={<Panier />} />
           <Route path="/Favoris" element ={<Favoris />} />
           <Route path="/Search" element={<Search />} />
+          <Route path="/Offres" element={<Offres />} />
+          <Route path="/Makeup" element={<Makeup />} />
+          <Route path="/Skincare" element={<Skincare />} />
+          <Route path="/admin-secret-2026" element={<AdminSecret />} />
+          <Route path="/admin-makeup" element={<AdminMakeup />} />
+          <Route path="/admin-skincare" element={<AdminSkincare />} />
+          
         </Routes>
       </div>
     </>
