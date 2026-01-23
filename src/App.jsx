@@ -11,7 +11,7 @@ import Search from "./pages/Search";
 import Offres from "./Components/Offres";
 import Makeup from "./Components/Makeup";
 import AdminSecret from "./pages/AdminSecret";
-import AdminMakeup from './pages/AdminMakeup';
+
 import AdminSkincare from "./pages/AdminSkincare";
 import Skincare from './Components/Skincare';
 
@@ -34,7 +34,7 @@ function App() {
           <Route path="/Makeup" element={<Makeup />} />
           <Route path="/Skincare" element={<Skincare />} />
           <Route path="/admin-secret-2026" element={<AdminSecret />} />
-          <Route path="/admin-makeup" element={<AdminMakeup />} />
+      
           <Route path="/admin-skincare" element={<AdminSkincare />} />
           
         </Routes>
