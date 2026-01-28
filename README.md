@@ -18,7 +18,7 @@
 
 <div align="center">
   <img src="./screenshots/Screenshott_home.png" alt="Page d'accueil" width="800"/>
-  <p><i>Interface client moderne et responsive</i></p>
+  
 </div>
 
 ---
