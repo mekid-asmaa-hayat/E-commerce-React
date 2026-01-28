@@ -17,7 +17,7 @@
 ## 📸 Aperçu
 
 <div align="center">
-  <img src="./screenshots/Screenshott_home.png" alt="Page d'accueil" width="800"/>
+  <img src="./screenshots/Screenshot_home.png" alt="Page d'accueil" width="800"/>
    <img src="./screenshots/Screen_Login.png" alt="login" width="800"/>
 </div>
 
